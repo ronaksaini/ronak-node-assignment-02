@@ -9,9 +9,13 @@ const io = socketIo(server);
 
 // Connect to MongoDB Atlas
 mongoose
-  .connect("mongodb://localhost:27017",{dbName:"test"})
+  .connect(
+    "mongodb+srv://ronaksaini783:E5HRj9QmIK1JsoYu@node-assignment-1.3t30enw.mongodb.net/?retryWrites=true&w=majority&appName=node-assignment-1",
+    { useNewUrlParser: true, useUnifiedTopology: true }
+  )
   .then(() => console.log("Connected successfully to MongoDB"))
   .catch((err) => console.error("Error connecting to MongoDB:", err));
+
 
 // Define a schema for the user data
 const userSchema = new mongoose.Schema({
