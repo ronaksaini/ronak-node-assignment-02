@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Users</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h2>Live Users</h2>
+    <ul id="liveUsersList"></ul>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        // Function to show user details in an alert
+        function showDetails(userData) {
+            const userDataString = `Name: ${userData.firstName} ${userData.lastName}\nEmail: ${userData.email}\nMobile No: ${userData.mobileNo}\nStreet: ${userData.street}\nCity: ${userData.city}\nState: ${userData.state}\nCountry: ${userData.country}\nLogin ID: ${userData.loginId}`;
+            alert(userDataString);
+        }
+
+
+        async function AllUser() {
+    try {
+        let userData = await fetch("/api/user");
+        const data = await userData.json();
+        data.map((userData) => {
+            const { email, mobileNo, street, city, state, country, loginId } = userData.userData;
+            const {socketId} = userData
+            const listItem = document.createElement('li');
+            listItem.textContent = `Socket ID: ${socketId}`;
+            listItem.setAttribute('data-userdata', JSON.stringify(userData));
+            document.getElementById('liveUsersList').appendChild(listItem);
+
+            // Create a button to show details for this user
+            const button = document.createElement('button');
+            button.textContent = 'Show Details';
+            button.addEventListener('click', () => {
+                showDetails(userData.userData);
+            });
+            listItem.appendChild(button);
+});
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+AllUser();
+
+
+        // Socket.io event listeners for new users and user disconnections
+        socket.on('newUser', (userData) => {
+           
+        });
+
+        socket.on('userDisconnected', (socketId) => {
+            const listItem = document.querySelector(`li[data-socketid="${socketId}"]`);
+            if (listItem) {
+                listItem.remove();
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <h2>Enter Data</h2>
+    <form id="myForm">
+        <div>
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" required />
+        </div>
+
+        <div>
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" required />
+        </div>
+
+        <div>
+            <label for="mobileNo">Mobile No:</label>
+            <input
+                type="tel"
+                id="mobileNo"
+                name="mobileNo"
+                pattern="[0-9]{10}"
+                required
+            />
+        </div>
+
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required />
+        </div>
+
+        <div>
+            <label for="street">Street:</label>
+            <input type="text" id="street" name="street" required />
+        </div>
+
+        <div>
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" required />
+        </div>
+
+        <div>
+            <label for="state">State:</label>
+            <input type="text" id="state" name="state" required />
+        </div>
+
+        <div>
+            <label for="country">Country:</label>
+            <input type="text" id="country" name="country" required />
+        </div>
+
+        <div>
+            <label for="loginId">Login ID: <br><small>must be of 8 characters containing uppercase, lowercase and numbers</small></label>
+            <input
+                type="text"
+                id="loginId"
+                name="loginId"
+                pattern="[a-zA-Z0-9]{8}"
+                required
+                placeholder="eg. Ronak123"
+            />
+        </div>
+
+        <div>
+            <label for="password">Password:<br><small>must be of 9 characters containing uppercase, lowercase, numbers and symbols</small></label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{9,}$"
+                required
+                placeholder="eg. Ronak@123"
+            />
+        </div>
+
+        <button type="submit">Save</button>
+    </form>
+    <a href="/liveUsers.html">Live</a>
+    <ul id="liveUsers"></ul>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('connect', () => {
+            console.log('Connected to server');
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Disconnected from server');
+        });
+
+        socket.on('newUser', (userData) => {
+            const { name, email, socketId, mobileNo, street,city,state,country,loginId } = userData;
+            const listItem = document.createElement('li');
+            listItem.textContent = `Socket ID: ${socketId} Joined Live Room`;
+            listItem.setAttribute('data-userdata', JSON.stringify(userData));   
+            document.getElementById('liveUsers').appendChild(listItem);
+
+           
+        });
+
+        socket.on('userDisconnected', (socketId) => {
+            const listItem = document.querySelector(`li[data-socketid="${socketId}"]`);
+            if (listItem) {
+                listItem.remove();
+            }
+        });
+      
+        socket.on('formSubmissionSuccess', () => {
+            alert('Form submitted successfully!');
+            document.getElementById('myForm').reset();
+        });
+    
+        socket.on('formSubmissionError', (errorMessage) => {
+            alert(errorMessage);
+        });
+
+        // Handle form submission
+        document.getElementById('myForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const userData = Object.fromEntries(formData.entries());
+            socket.emit('submitForm', userData);
+        });
+    </script>
+</body>
+</html>
+
+
+
+

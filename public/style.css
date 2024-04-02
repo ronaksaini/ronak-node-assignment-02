@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+body {
+    font-family: "Poppins", sans-serif;
+  }
+#myForm{
+    width: 400px;
+    margin: auto;
+}
+#myForm div{
+    display: flex;
+    justify-content: space-between;
+    margin: 12px 0px;
+    align-items: center;
+}
+label{
+    font-size: 16px;
+    color: crimson;
+}
+small{
+    font-size: 8px;
+}
+input::placeholder{
+    font-size: 12px;
+    color: rgba(165, 165, 165, 0.75);
+}
+input{
+    outline: none;
+    padding: 8px 12px;
+    border: 1px solid rgb(255, 176, 192);
+    border-radius: 4px;
+    width: 250px;
+
+}
+#data{
+    width: 400px;
+    margin: auto;
+    display: none;
+    max-height: 400px;
+    overflow: auto;
+}
+button{
+    padding: 8px 12px;
+    margin: 24px 10px;
+    border: 2px solid crimson;
+    background-color: crimson;
+    color: #fff;
+    border-radius: 8px;
+}
+button:hover{
+    background-color: rgb(255, 84, 118);
+    cursor: pointer;
+}
+#data div{
+    margin: 34px 0px;
+    line-height: 24px;
+}
+h2{
+    text-align: center;
+    margin: 24px 0px;
+}
+.show{
+    text-align: center;
+    display: block;
+    margin: -60px auto 0px;
+}
+.notification-container{
+    position: absolute;
+    right: 30px;
+    top: 30px;
+}
+#notification{
+    font-size: 16px;
+    color: #fff;
+    background-color: green;
+    padding: 8px 14px;
+    display: none;
+}
